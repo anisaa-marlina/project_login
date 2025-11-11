@@ -1,15 +1,52 @@
+<?php
+session_start();
+
+// Cek apakah user sudah login
+if (isset($_SESSION['username'])) {
+    header("Location: dashboard.php");
+    exit;
+}
+
+// Proses login saat form dikirim
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // Login sederhana (username: admin, password: 123)
+    if ($username === 'admin' && $password === '123') {
+        $_SESSION['username'] = $username;
+        $_SESSION['role'] = 'Dosen';
+        header("Location: dashboard.php");
+        exit;
+    } else {
+        $error = "Username atau password salah!";
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Login</title>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Login</title>
 </head>
 <body>
     <h2>Form Login</h2>
-    <Form method="post">
-        Username: <input type= "text" name="username" requeired><br><br>
-        Password: <input type= "password" name="password" requeired><br><br>
-        <button type="submit">Login</buton>
-        <button type="reset">Batal</buton>
-</Form>
+
+    <?php if (!empty($error)): ?>
+        <p style="color:red;"><?php echo $error; ?></p>
+    <?php endif; ?>
+
+    <form method="post" action="">
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <button type="submit">Login</button>
+        <button type="reset">Batal</button>
+    </form>
 </body>
 </html>
